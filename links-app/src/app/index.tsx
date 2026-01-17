@@ -1,7 +1,9 @@
 import { Categories } from "@/components/categories";
 import { Link } from "@/components/link";
+import { Option } from "@/components/option";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
+import { router } from "expo-router";
 import {
   FlatList,
   Image,
@@ -18,7 +20,7 @@ export default function App() {
       <View style={styles.header}>
         <Image source={require("@/assets/logo.png")} style={styles.logo} />
 
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.navigate("/add")}>
           <MaterialIcons name='add' size={32} color={colors.green[300]} />
         </TouchableOpacity>
       </View>
@@ -40,7 +42,7 @@ export default function App() {
         showsVerticalScrollIndicator={false}
       />
 
-      <Modal transparent>
+      <Modal transparent visible={false} animationType='slide'>
         <View style={styles.modal}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -57,6 +59,11 @@ export default function App() {
 
             <Text style={styles.modalLinkName}>Example Link 1</Text>
             <Text style={styles.modalUrl}>https://example1.com</Text>
+
+            <View style={styles.modalFooter}>
+              <Option name='Excluir' icon='delete' variant='secondary' />
+              <Option name='Abrir' icon='link' />
+            </View>
           </View>
         </View>
       </Modal>
