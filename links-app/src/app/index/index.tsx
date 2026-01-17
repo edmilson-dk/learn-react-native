@@ -1,4 +1,4 @@
-import { Category } from "@/components/category";
+import { Categories } from "@/components/categories";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image, TouchableOpacity, View } from "react-native";
@@ -15,9 +15,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      <Category name='Projetos' icon='code' isSelected />
-      <Category name='Site' icon='language' isSelected={false} />
-      <Category name='Video' icon='movie' isSelected={false} />
+      <Categories />
     </View>
   );
 }
