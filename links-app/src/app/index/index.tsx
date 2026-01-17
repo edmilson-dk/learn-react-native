@@ -1,4 +1,5 @@
 import { Categories } from "@/components/categories";
+import { Link } from "@/components/link";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Image, TouchableOpacity, View } from "react-native";
@@ -16,6 +17,12 @@ export default function App() {
       </View>
 
       <Categories />
+
+      <Link
+        name='Example Link'
+        url='https://example.com'
+        onDetails={() => console.log("Details pressed")}
+      />
     </View>
   );
 }
