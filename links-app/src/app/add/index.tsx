@@ -1,11 +1,32 @@
+import { Button } from "@/components/button";
 import { Categories } from "@/components/categories";
+import { Input } from "@/components/input";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { Text, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import { Alert, Text, TouchableOpacity, View } from "react-native";
 import { styles } from "./styles";
 
 export default function Add() {
+  const [category, setCategory] = useState("");
+  const [name, setName] = useState("");
+  const [url, setUrl] = useState("");
+
+  const handleAdd = () => {
+    if (!category) {
+      return Alert.alert("Categoria", "Selecione uma categoria para o link.");
+    }
+
+    if (!name.trim()) {
+      return Alert.alert("Nome", "Informe um nome válido para o link.");
+    }
+
+    if (!url.trim()) {
+      return Alert.alert("URL", "Informe uma URL válida para o link.");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -18,7 +39,13 @@ export default function Add() {
 
       <Text style={styles.label}>Selecione uma categoria</Text>
 
-      <Categories />
+      <Categories selected={category} onChange={setCategory} />
+
+      <View style={styles.form}>
+        <Input placeholder='Nome' onChangeText={setName} />
+        <Input placeholder='URL' onChangeText={setUrl} keyboardType='url' />
+        <Button title='Adicionar' onPress={handleAdd} />
+      </View>
     </View>
   );
 }

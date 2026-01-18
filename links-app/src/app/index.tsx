@@ -4,6 +4,7 @@ import { Option } from "@/components/option";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import {
   FlatList,
   Image,
@@ -15,6 +16,8 @@ import {
 import { styles } from "./styles";
 
 export default function App() {
+  const [category, setCategory] = useState("");
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -25,7 +28,7 @@ export default function App() {
         </TouchableOpacity>
       </View>
 
-      <Categories />
+      <Categories selected={category} onChange={setCategory} />
 
       <FlatList
         data={["1", "2", "3"]}
