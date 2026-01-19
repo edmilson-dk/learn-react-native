@@ -4,8 +4,8 @@ import { Option } from "@/components/option";
 import { LinkStorage, linkStorage } from "@/storage/link-storage";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
 import {
   Alert,
   FlatList,
@@ -30,9 +30,11 @@ export default function App() {
     }
   };
 
-  useEffect(() => {
-    getLinks();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      getLinks();
+    }, []),
+  );
 
   return (
     <View style={styles.container}>
