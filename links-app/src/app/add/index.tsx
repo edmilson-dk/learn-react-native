@@ -1,6 +1,7 @@
 import { Button } from "@/components/button";
 import { Categories } from "@/components/categories";
 import { Input } from "@/components/input";
+import { linkStorage } from "@/storage/link-storage";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
@@ -13,17 +14,28 @@ export default function Add() {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
 
-  const handleAdd = () => {
-    if (!category) {
-      return Alert.alert("Categoria", "Selecione uma categoria para o link.");
-    }
+  const handleAdd = async () => {
+    try {
+      if (!category) {
+        return Alert.alert("Categoria", "Selecione uma categoria para o link.");
+      }
 
-    if (!name.trim()) {
-      return Alert.alert("Nome", "Informe um nome válido para o link.");
-    }
+      if (!name.trim()) {
+        return Alert.alert("Nome", "Informe um nome válido para o link.");
+      }
 
-    if (!url.trim()) {
-      return Alert.alert("URL", "Informe uma URL válida para o link.");
+      if (!url.trim()) {
+        return Alert.alert("URL", "Informe uma URL válida para o link.");
+      }
+
+      await linkStorage.save({
+        id: new Date().getTime().toString(),
+        name: name.trim(),
+        url: url.trim(),
+        category,
+      });
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível adicionar o link.");
     }
   };
 
@@ -43,7 +55,12 @@ export default function Add() {
 
       <View style={styles.form}>
         <Input placeholder='Nome' onChangeText={setName} />
-        <Input placeholder='URL' onChangeText={setUrl} keyboardType='url' />
+        <Input
+          placeholder='URL'
+          onChangeText={setUrl}
+          keyboardType='url'
+          autoCapitalize='none'
+        />
         <Button title='Adicionar' onPress={handleAdd} />
       </View>
     </View>
