@@ -3,6 +3,7 @@ import { Link } from "@/components/link";
 import { Option } from "@/components/option";
 import { LinkStorage, linkStorage } from "@/storage/link-storage";
 import { colors } from "@/styles/colors";
+import { categories } from "@/utils/categories";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useFocusEffect } from "expo-router";
 import { useCallback, useState } from "react";
@@ -19,12 +20,14 @@ import { styles } from "./styles";
 
 export default function App() {
   const [links, setLinks] = useState<LinkStorage[]>([]);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(categories[0].name);
 
   const getLinks = async () => {
     try {
       const links = await linkStorage.get();
-      setLinks(links);
+
+      const filteredLinks = links.filter((link) => link.category === category);
+      setLinks(filteredLinks);
     } catch (error) {
       Alert.alert("Erro", "Não foi possível carregar os links.");
     }
@@ -33,7 +36,7 @@ export default function App() {
   useFocusEffect(
     useCallback(() => {
       getLinks();
-    }, []),
+    }, [category]),
   );
 
   return (
