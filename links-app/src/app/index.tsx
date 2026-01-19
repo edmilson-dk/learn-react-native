@@ -19,8 +19,10 @@ import {
 import { styles } from "./styles";
 
 export default function App() {
+  const [showModal, setShowModal] = useState(false);
   const [links, setLinks] = useState<LinkStorage[]>([]);
   const [category, setCategory] = useState(categories[0].name);
+  const [targetLink, setTargetLink] = useState<LinkStorage | null>(null);
 
   const getLinks = async () => {
     try {
@@ -31,6 +33,12 @@ export default function App() {
     } catch (error) {
       Alert.alert("Erro", "Não foi possível carregar os links.");
     }
+  };
+
+  const onDetails = (id: string) => {
+    const link = links.find((link) => link.id === id) || null;
+    setTargetLink(link);
+    setShowModal(true);
   };
 
   useFocusEffect(
@@ -58,7 +66,7 @@ export default function App() {
           <Link
             name={item.name}
             url={item.url}
-            onDetails={() => console.log(`Details pressed for link ${item}`)}
+            onDetails={() => onDetails(item.id)}
           />
         )}
         style={styles.links}
@@ -66,13 +74,13 @@ export default function App() {
         showsVerticalScrollIndicator={false}
       />
 
-      <Modal transparent visible={false} animationType='slide'>
+      <Modal transparent visible={showModal} animationType='slide'>
         <View style={styles.modal}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalCategory}>Curso</Text>
+              <Text style={styles.modalCategory}>{targetLink?.category}</Text>
 
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowModal(false)}>
                 <MaterialIcons
                   name='close'
                   size={20}
@@ -81,8 +89,8 @@ export default function App() {
               </TouchableOpacity>
             </View>
 
-            <Text style={styles.modalLinkName}>Example Link 1</Text>
-            <Text style={styles.modalUrl}>https://example1.com</Text>
+            <Text style={styles.modalLinkName}>{targetLink?.name}</Text>
+            <Text style={styles.modalUrl}>{targetLink?.url}</Text>
 
             <View style={styles.modalFooter}>
               <Option name='Excluir' icon='delete' variant='secondary' />
