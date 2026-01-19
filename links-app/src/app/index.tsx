@@ -1,11 +1,13 @@
 import { Categories } from "@/components/categories";
 import { Link } from "@/components/link";
 import { Option } from "@/components/option";
+import { LinkStorage, linkStorage } from "@/storage/link-storage";
 import { colors } from "@/styles/colors";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
+  Alert,
   FlatList,
   Image,
   Modal,
@@ -16,7 +18,21 @@ import {
 import { styles } from "./styles";
 
 export default function App() {
+  const [links, setLinks] = useState<LinkStorage[]>([]);
   const [category, setCategory] = useState("");
+
+  const getLinks = async () => {
+    try {
+      const links = await linkStorage.get();
+      setLinks(links);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível carregar os links.");
+    }
+  };
+
+  useEffect(() => {
+    getLinks();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -31,12 +47,12 @@ export default function App() {
       <Categories selected={category} onChange={setCategory} />
 
       <FlatList
-        data={["1", "2", "3"]}
-        keyExtractor={(item) => item}
+        data={links}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <Link
-            name={`Example Link ${item}`}
-            url={`https://example${item}.com`}
+            name={item.name}
+            url={item.url}
             onDetails={() => console.log(`Details pressed for link ${item}`)}
           />
         )}
