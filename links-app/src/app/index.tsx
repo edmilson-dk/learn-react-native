@@ -41,6 +41,36 @@ export default function App() {
     setShowModal(true);
   };
 
+  const deleteLink = async () => {
+    try {
+      await linkStorage.remove(targetLink?.id || "");
+      getLinks();
+      setShowModal(false);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível excluir o link.");
+    }
+  };
+
+  const onDelete = async () => {
+    try {
+      Alert.alert("Excluir link", "Tem certeza que deseja excluir este link?", [
+        {
+          text: "Não",
+          style: "cancel",
+        },
+        {
+          text: "Sim",
+          style: "destructive",
+          onPress: async () => {
+            await deleteLink();
+          },
+        },
+      ]);
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível excluir o link.");
+    }
+  };
+
   useFocusEffect(
     useCallback(() => {
       getLinks();
@@ -93,7 +123,12 @@ export default function App() {
             <Text style={styles.modalUrl}>{targetLink?.url}</Text>
 
             <View style={styles.modalFooter}>
-              <Option name='Excluir' icon='delete' variant='secondary' />
+              <Option
+                name='Excluir'
+                icon='delete'
+                variant='secondary'
+                onPress={onDelete}
+              />
               <Option name='Abrir' icon='link' />
             </View>
           </View>
