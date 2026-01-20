@@ -11,6 +11,7 @@ import {
   Alert,
   FlatList,
   Image,
+  Linking,
   Modal,
   Text,
   TouchableOpacity,
@@ -39,6 +40,15 @@ export default function App() {
     const link = links.find((link) => link.id === id) || null;
     setTargetLink(link);
     setShowModal(true);
+  };
+
+  const onOpen = async () => {
+    try {
+      await Linking.openURL(targetLink?.url || "");
+    } catch (error) {
+      console.log(error);
+      Alert.alert("Erro", "Não foi possível abrir o link.");
+    }
   };
 
   const deleteLink = async () => {
@@ -129,7 +139,7 @@ export default function App() {
                 variant='secondary'
                 onPress={onDelete}
               />
-              <Option name='Abrir' icon='link' />
+              <Option name='Abrir' icon='link' onPress={onOpen} />
             </View>
           </View>
         </View>
